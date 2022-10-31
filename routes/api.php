@@ -29,4 +29,6 @@ Route::delete('/animals/{id}', [AnimalController::class, 'destroy']);
 
 #get all resource students
 #method get
-Route::get('/students',[StudentController::class, 'index']);
+Route::get('/students', [StudentController::class, 'index']);
+#method post
+Route::post('/students', [StudentController::class, 'store']);
