@@ -28,7 +28,11 @@ Route::put('/animals/{id}', [AnimalController::class, 'update']);
 Route::delete('/animals/{id}', [AnimalController::class, 'destroy']);
 
 #get all resource students
-#method get
+#method get for show all data
 Route::get('/students', [StudentController::class, 'index']);
-#method post
+#method post for add data
 Route::post('/students', [StudentController::class, 'store']);
+#method put for update data
+Route::put('/students/{id}', [StudentController::class, 'update']);
+#method delete for delete data
+Route::delete('/students/{id}', [StudentController::class, 'destroy']);
