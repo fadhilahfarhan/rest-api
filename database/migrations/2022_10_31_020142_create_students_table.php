@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('nama');
             $table->string('nim');
             $table->string('email');
-            $table->string('jurusan');
+            $table->string('jurusan'); 
             $table->timestamps();
         });
     }
