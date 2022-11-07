@@ -39,7 +39,7 @@ class StudentController extends Controller
         #jika fails akan menampilkan error
         if ($validator->fails()) {
             $data = [
-                'message' => 'Data cannot be empty!'
+                'message' => 'Input data failed!'
             ];
 
             return response()->json($data, 404);
@@ -119,7 +119,7 @@ class StudentController extends Controller
             return response()->json($data, 200);
         } else {
             $data = [
-                'message' => 'Data Student No Found!'
+                'message' => 'Data Student Not Found!'
             ];
             return response()->json($data, 404);
         }
