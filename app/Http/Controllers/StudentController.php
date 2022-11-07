@@ -14,15 +14,12 @@ class StudentController extends Controller
         #fungsi all() untuk mendapatkan seluruh resource
         $students = Student::all();
         if ($students->isEmpty()) {
-            $data = ['message' => 'Data students is emty'];
-
-            return response()->json($data, 404);
+            return response()->json(['message' => 'Data students is emty'], 404);
         } else {
             $data = [
                 'message' => 'Get all students',
                 'data' => $students
             ];
-
             return response()->json($data, 200);
         }
     }
@@ -30,7 +27,7 @@ class StudentController extends Controller
     public function store(Request $request)
     {
         #untuk memvalidasi apakah data yang diisi benar atau salah
-        $validator = Validator::make($request->all(), [
+        $input = Validator::make($request->all(), [
             'nama' => 'required|min:2|max:255',
             'nim' => 'required|min:10|max:10',
             'email' => 'required|email',
@@ -38,19 +35,15 @@ class StudentController extends Controller
         ]);
 
         #jika fails akan menampilkan error
-        if ($validator->fails()) {
-            $data = ['message' => 'Input data failed!'];
-
-            return response()->json($data, 404);
+        if ($input->fails()) {
+            return response()->json(['message' => 'Input data failed!'], 404);
         } else {
             #ini akan menampilkan jika sudah benar
             $students = Student::create($request->all());
-
             $data = [
                 'message' => 'Student is created succesfully',
                 'data' => $students
             ];
-
             return response()->json($data, 201);
         }
     }
@@ -72,18 +65,14 @@ class StudentController extends Controller
 
             #update untuk mengubah data
             $student->update($input);
-
             $data = [
                 'message' => 'Data student updated succesfully',
                 'data' => $input
             ];
-
             return response()->json($data, 200);
         } else {
             #ini akan menampilkan jika data memang tidak ada
-            $data = ['message' => 'Data Student Not Found!'];
-
-            return response()->json($data, 404);
+            return response()->json(['message' => 'Data Student Not Found!'], 404);
         }
     }
 
@@ -94,12 +83,9 @@ class StudentController extends Controller
             #delete untuk menghapus data 
             $student->delete();
             $data = ['message' => 'Data student Deleted succesfully'];
-
             return response()->json($data, 200);
         } else {
-            $data = ['message' => 'Data Student Not Found!'];
-
-            return response()->json($data, 404);
+            return response()->json(['message' => 'Data Student Not Found!'], 404);
         }
     }
 
@@ -111,12 +97,9 @@ class StudentController extends Controller
                 'message' => 'Get details student',
                 'data' => $student
             ];
-
             return response()->json($data, 200);
         } else {
-            $data = ['message' => 'Data Student Not Found!'];
-
-            return response()->json($data, 404);
+            return response()->json(['message' => 'Data Student Not Found!'], 404);
         }
     }
 }
