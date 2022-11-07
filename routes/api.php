@@ -20,21 +20,22 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/animals', [AnimalController::class, 'index']);
-
 Route::post('/animals', [AnimalController::class, 'store']);
-
 Route::put('/animals/{id}', [AnimalController::class, 'update']);
-
 Route::delete('/animals/{id}', [AnimalController::class, 'destroy']);
 
 #Student Route
 #method get for show all data
 Route::get('/students', [StudentController::class, 'index']);
+
 #method post for add data
 Route::post('/students', [StudentController::class, 'store']);
+
 #method put for update data
 Route::put('/students/{id}', [StudentController::class, 'update']);
+
 #method delete for delete data
 Route::delete('/students/{id}', [StudentController::class, 'destroy']);
+
 #method get for show selected data
 Route::get('/students/{id}', [StudentController::class, 'show']);
