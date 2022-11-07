@@ -25,12 +25,6 @@ class StudentController extends Controller
 
             return response()->json($data, 200);
         }
-
-        # menggunakan response json laravel
-        # otomatis set header content type json
-        # otomatis mengubah data array  ke json
-        # mengatur status code
-        # return response()->json($data, 200);
     }
 
     public function store(Request $request)
@@ -39,7 +33,7 @@ class StudentController extends Controller
         $validator = Validator::make($request->all(), [
             'nama' => 'required|min:2|max:255',
             'nim' => 'required|min:10|max:10',
-            'email' => 'required',
+            'email' => 'required|email',
             'jurusan' => 'required'
         ]);
 
