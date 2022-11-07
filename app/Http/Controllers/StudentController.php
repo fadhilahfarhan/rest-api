@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Student;
+use Illuminate\Support\Facades\Validator;
 
 class StudentController extends Controller
 {
     public function index()
     {
         # menggunakan model students untul select datanya
+        #fungsi all() untuk mendapatkan seluruh resource
         $students = Student::all();
 
         $data = [
@@ -26,50 +28,100 @@ class StudentController extends Controller
 
     public function store(Request $request)
     {
-        $input = [
-            'nama' => $request->nama,
-            'nim' => $request->nim,
-            'email' => $request->email,
-            'jurusan' => $request->jurusan
-        ];
+        #untuk memvalidasi apakah data yang diisi benar atau salah
+        $validator = Validator::make($request->all(), [
+            'nama' => 'required|min:2|max:255',
+            'nim' => 'required|min:10|max:10',
+            'email' => 'required',
+            'jurusan' => 'required'
+        ]);
 
-        $students = Student::create($input);
+        #jika fails akan menampilkan error
+        if ($validator->fails()) {
+            $data = [
+                'message' => 'Data cannot be empty!'
+            ];
 
-        $data = [
-            'message' => 'Student is created succesfully',
-            'data' => $students
-        ];
+            return response()->json($data, 404);
+        } else {
+            #ini akan menampilkan jika sudah benar
+            $students = Student::create($request->all());
 
-        return response()->json($data, 201);
+            $data = [
+                'message' => 'Student is created succesfully',
+                'data' => $students
+            ];
+
+            return response()->json($data, 201);
+        }
     }
 
+    #untuk mengupdate data
     public function update(Request $request, $id)
     {
-        $input = [
-            'nama' => $request->nama,
-            'nim' => $request->nim,
-            'email' => $request->email,
-            'jurusan' => $request->jurusan
-        ];
+        #find untuk menemukan id yang ingin diubah
+        $student = Student::find($id);
+        if ($student) {
+            #ini akan menampilkan data yang berhasil diubah
+            #jika data yang diubah tidak ada akan menggunakan data yang lama
+            $input = [
+                'nama' => $request->nama ?? $student->nama,
+                'nim' => $request->nim ?? $student->nim,
+                'email' => $request->email ?? $student->email,
+                'jurusan' => $request->jurusan ?? $student->jurusan
+            ];
+            #update untuk mengubah data
+            $student->update($input);
 
-        Student::find($id)->update($input);
+            $data = [
+                'message' => 'Data student updated succesfully',
+                'data' => $input
+            ];
 
-        $data = [
-            'message' => 'Data student updated succesfully',
-            'data' => $input
-        ];
+            return response()->json($data, 200);
+        } else {
+            #ini akan menampilkan jika data memang tidak ada
+            $data = [
+                'message' => 'Data Student Not Found!'
+            ];
 
-        return response()->json($data, 200);
+            return response()->json($data, 404);
+        }
     }
 
     public function destroy($id)
     {
-        Student::find($id)->delete();
-        
-        $data = [
-            'message' => 'Data student Deleted succesfully',
-            'id' => $id
-        ];
-        return response()->json($data, 200);
+        $student = Student::find($id);
+        if ($student) {
+            #delete untuk menghapus data 
+            $student->delete();
+
+            $data = [
+                'message' => 'Data student Deleted succesfully',
+            ];
+            return response()->json($data, 200);
+        } else {
+            $data = [
+                'message' => 'Data Student Not Found!'
+            ];
+            return response()->json($data, 404);
+        }
+    }
+
+    public function show($id)
+    {
+        $student = Student::find($id);
+        if ($student) {
+            $data = [
+                'message' => 'Get details student',
+                'data' => $student
+            ];
+            return response()->json($data, 200);
+        } else {
+            $data = [
+                'message' => 'Data Student No Found!'
+            ];
+            return response()->json($data, 404);
+        }
     }
 }
