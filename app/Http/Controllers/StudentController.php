@@ -72,6 +72,7 @@ class StudentController extends Controller
             return response()->json(['message' => 'Id not found!'], 404);
         } else{
             #jika input dan id benar maka akan diupdate
+            
             $student->update($request->all());
             $data = [
                 'message' => 'Data student updated succesfully',
