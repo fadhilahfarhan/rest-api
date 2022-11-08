@@ -51,7 +51,7 @@ class StudentController extends Controller
 
     #untuk mengupdate data
     public function update(Request $request, $id)
-    {
+    { 
         #mencari data menggunakan find id
         $student = Student::find($id);
         #memvalidasi data yang diinput
