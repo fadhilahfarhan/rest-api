@@ -65,8 +65,12 @@ class StudentController extends Controller
 
         #fails digunakan jika ada ada kegagalan dalam proses validasi
         if ($input->fails()) {
+            #jika input data ada kesalahan
             return response()->json(['message' => 'Ups something wrong!'], 404);
-        } else {
+        }elseif(!$student){
+            #jika id tidak ditemukan
+            return response()->json(['message' => 'Id not found!'], 404);
+        } else{
             $student->update($request->all());
             $data = [
                 'message' => 'Data student updated succesfully',
