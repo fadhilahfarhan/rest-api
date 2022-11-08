@@ -13,6 +13,7 @@ class StudentController extends Controller
         # menggunakan model students untul select datanya
         #fungsi all() untuk mendapatkan seluruh resource
         $students = Student::all();
+        #isEmty digunakan untuk menjelaskan data yang dicari ada atau tidak
         if ($students->isEmpty()) {
             return response()->json(['message' => 'Data students is emty'], 404);
         } else {
@@ -51,28 +52,27 @@ class StudentController extends Controller
     #untuk mengupdate data
     public function update(Request $request, $id)
     {
-        #find untuk menemukan id yang ingin diubah
+        #mencari data menggunakan find id
         $student = Student::find($id);
-        if ($student) {
-            #ini akan menampilkan data yang berhasil diubah
-            #jika data yang diubah tidak ada akan menggunakan data yang lama
-            $input = [
-                'nama' => $request->nama ?? $student->nama,
-                'nim' => $request->nim ?? $student->nim,
-                'email' => $request->email ?? $student->email,
-                'jurusan' => $request->jurusan ?? $student->jurusan
-            ];
+        #memvalidasi data yang diinput
+        #nullable agar tetap bisa diproses jika tidak mendapat input
+        $input = Validator::make($request->all(), [
+            'nama' => 'nullable|min:2|max:255',
+            'nim' => 'nullable|min:10|max:10',
+            'email' => 'nullable|email',
+            'jurusan' => 'nullable'
+        ]);
 
-            #update untuk mengubah data
-            $student->update($input);
+        #fails digunakan jika ada ada kegagalan dalam proses validasi
+        if ($input->fails()) {
+            return response()->json(['message' => 'Ups something wrong!'], 404);
+        } else {
+            $student->update($request->all());
             $data = [
                 'message' => 'Data student updated succesfully',
-                'data' => $input
+                'data' => $student
             ];
             return response()->json($data, 200);
-        } else {
-            #ini akan menampilkan jika data memang tidak ada
-            return response()->json(['message' => 'Data Student Not Found!'], 404);
         }
     }
 
